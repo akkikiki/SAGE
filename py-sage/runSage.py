@@ -40,7 +40,7 @@ def runSage(filenames,base_file=None,max_vocab_size=10000,smoothing=1.):
         vocab_filenames += [base_file]
     
     X = vect.fit_transform(getData(vocab_filenames))
-    vocab = {i:j for j,i in vect.vocabulary_.iteritems()}
+    #vocab = {i:j for j,i in vect.vocabulary_.items()}
     
     def getNumLines(filename):
         with open(filename) as fin:
@@ -53,7 +53,7 @@ def runSage(filenames,base_file=None,max_vocab_size=10000,smoothing=1.):
     if base_file is not None:
         X_base = np.array(X[idxs[-1]:,:].sum(axis=0))[0]
     else:
-        X_base = np.array(x.values()).sum(axis=0)
+        X_base = np.array(list(x.values())).sum(axis=0)
     mu = np.log(X_base+smoothing) - np.log((X_base+smoothing).sum())
 
     etas = {filename:sage.estimate(x[filename],mu) for filename in filenames}
@@ -71,8 +71,8 @@ def printEtaCSV(etas,vect,x,X_base,num_keywords=25):
                             delimiter='\t'
     )
     writer.writeheader()
-    vocab = {i:j for j,i in vect.vocabulary_.iteritems()}
-    for filename,eta in etas.iteritems():
+    vocab = {i:j for j,i in vect.vocabulary_.items()}
+    for filename,eta in etas.items():
         #printEtaCSV(fname+'-sage.csv',eta,vect,x[i],mu,num_keywords=args.num_keywords)
         #with open(filename,'w') as fout:
         for word in sage.topK(eta,vocab,num_keywords):

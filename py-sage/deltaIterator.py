@@ -13,7 +13,7 @@ class DeltaIterator:
     def update(s,x):
         if s.prev is not None:
             change = norm(x - s.prev) / (1e-6+norm(x))
-            if s.debug: print s.its,'/',s.max_its,change
+            if s.debug: print(s.its,'/',s.max_its,change)
             if change < s.thresh: s.done = True
         s.its += 1
         if s.its > s.max_its: s.done = True
